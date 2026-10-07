@@ -5,9 +5,11 @@ import com.agricultura.dto.response.ProductoListadoResponse;
 import com.agricultura.dto.response.ProductoResponse;
 import com.agricultura.model.Producto;
 import com.agricultura.model.Productor;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 
+@Component
 public class ProductoMapper {
     public Producto toEntity(ProductoRequest request, Productor productor) {
         Producto producto = new Producto();

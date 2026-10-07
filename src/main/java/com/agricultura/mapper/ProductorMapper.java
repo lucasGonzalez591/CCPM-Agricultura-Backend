@@ -3,7 +3,9 @@ package com.agricultura.mapper;
 import com.agricultura.dto.request.ProductorRequest;
 import com.agricultura.dto.response.ProductorResponse;
 import com.agricultura.model.Productor;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ProductorMapper {
     public Productor toEntity(ProductorRequest request) {
         Productor productor = new Productor();

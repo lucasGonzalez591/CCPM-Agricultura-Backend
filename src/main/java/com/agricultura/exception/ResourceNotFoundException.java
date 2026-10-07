@@ -1,4 +1,9 @@
 package com.agricultura.exception;
 
-public class ResourceNotFoundException {
+//devuelve 404
+public class ResourceNotFoundException  extends RuntimeException{
+
+    public ResourceNotFoundException(String message) {
+            super(message);
+        }
 }
