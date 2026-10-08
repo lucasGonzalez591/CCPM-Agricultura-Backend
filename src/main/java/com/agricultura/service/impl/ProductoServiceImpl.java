@@ -1,5 +1,6 @@
 package com.agricultura.service.impl;
 
+import com.agricultura.dto.filtro.ProductoFiltro;
 import com.agricultura.dto.request.ProductoRequest;
 import com.agricultura.dto.response.ProductoListadoResponse;
 import com.agricultura.dto.response.ProductoResponse;
@@ -10,6 +11,8 @@ import com.agricultura.model.Productor;
 import com.agricultura.repository.ProductoRepository;
 import com.agricultura.repository.ProductorRepository;
 import com.agricultura.service.ProductoService;
+import com.agricultura.specification.ProductoSpecification;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,8 +35,11 @@ public class ProductoServiceImpl implements ProductoService {
     }
 
     @Override
-    public List<ProductoListadoResponse> listar() {
-        return productoRepository.findAll().stream()
+    public List<ProductoListadoResponse> listar(ProductoFiltro filtro) {
+        filtro.validar();
+        return productoRepository
+                .findAll(ProductoSpecification.conFiltros(filtro), Sort.by("nombre"))
+                .stream()
                 .map(productoMapper::toListadoResponse)
                 .toList();
     }

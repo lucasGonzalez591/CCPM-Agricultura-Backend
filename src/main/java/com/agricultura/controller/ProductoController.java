@@ -1,5 +1,6 @@
 package com.agricultura.controller;
 
+import com.agricultura.dto.filtro.ProductoFiltro;
 import com.agricultura.dto.request.ProductoRequest;
 import com.agricultura.dto.response.ProductoListadoResponse;
 import com.agricultura.dto.response.ProductoResponse;
@@ -24,8 +25,8 @@ public class ProductoController {
     }
 
     @GetMapping
-    public List<ProductoListadoResponse> listar() {
-        return productoService.listar();
+    public List<ProductoListadoResponse> listar(ProductoFiltro filtro) {
+        return productoService.listar(filtro);
     }
 
     @GetMapping("/{id}")

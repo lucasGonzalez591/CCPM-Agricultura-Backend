@@ -5,6 +5,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -62,6 +63,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleIllegalArgument(IllegalArgumentException ex,
                                                                HttpServletRequest req) {
         return build(HttpStatus.BAD_REQUEST, ex.getMessage(), req, null);
+    }
+
+    @ExceptionHandler(BindException.class)
+    public ResponseEntity<ErrorResponse> handleBind(BindException ex, HttpServletRequest req) {
+        Map<String, String> errors = new LinkedHashMap<>();
+        ex.getBindingResult().getFieldErrors()
+                .forEach(e -> errors.putIfAbsent(e.getField(), "Valor inválido"));
+        return build(HttpStatus.BAD_REQUEST, "Parámetros de búsqueda inválidos", req, errors);
     }
 
 }

@@ -1,5 +1,6 @@
 package com.agricultura.service.impl;
 
+import com.agricultura.dto.filtro.ProductorFiltro;
 import com.agricultura.dto.request.ProductorRequest;
 import com.agricultura.dto.response.ProductorResponse;
 import com.agricultura.exception.DuplicateResourceException;
@@ -8,6 +9,8 @@ import com.agricultura.mapper.ProductorMapper;
 import com.agricultura.model.Productor;
 import com.agricultura.repository.ProductorRepository;
 import com.agricultura.service.ProductorService;
+import com.agricultura.specification.ProductorSpecification;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,8 +30,11 @@ public class ProductorServiceImpl implements ProductorService {
 
 
     @Override
-    public List<ProductorResponse> listar() {
-        return productorRepository.findAll().stream()
+    public List<ProductorResponse> listar(ProductorFiltro filtro) {
+        filtro.validar();
+        return productorRepository
+                .findAll(ProductorSpecification.conFiltros(filtro), Sort.by("apellido", "nombre"))
+                .stream()
                 .map(productorMapper::toResponse)
                 .toList();
     }
