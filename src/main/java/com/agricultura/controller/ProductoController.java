@@ -5,7 +5,10 @@ import com.agricultura.dto.request.ProductoRequest;
 import com.agricultura.dto.response.ProductoListadoResponse;
 import com.agricultura.dto.response.ProductoResponse;
 import com.agricultura.service.ProductoService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -15,6 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/productos")
+@Tag(name = "Productos", description = "CRUD y búsqueda de productos")
 public class ProductoController {
 
     private final ProductoService productoService;
@@ -24,8 +28,9 @@ public class ProductoController {
         this.productoService = productoService;
     }
 
+    @Operation(summary = "Lista productores aplicando filtros combinables")
     @GetMapping
-    public List<ProductoListadoResponse> listar(ProductoFiltro filtro) {
+    public List<ProductoListadoResponse> listar( @ParameterObject ProductoFiltro filtro) {
         return productoService.listar(filtro);
     }
 

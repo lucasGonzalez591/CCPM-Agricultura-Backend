@@ -6,7 +6,9 @@ import com.agricultura.dto.response.ProductoListadoResponse;
 import com.agricultura.dto.response.ProductorResponse;
 import com.agricultura.service.ProductoService;
 import com.agricultura.service.ProductorService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -16,6 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/productores")
+@Tag(name = "Productores", description = "CRUD y búsqueda de productores")
 public class ProductorController {
 
     private final ProductorService productorService;
@@ -27,7 +30,7 @@ public class ProductorController {
     }
 
     @GetMapping
-    public List<ProductorResponse> listar(ProductorFiltro filtro) {
+    public List<ProductorResponse> listar(@ParameterObject ProductorFiltro filtro) {
         return productorService.listar(filtro);
     }
 
