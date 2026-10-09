@@ -83,6 +83,7 @@ public class ProductoServiceImpl implements ProductoService {
     }
 
     @Override
+    @Transactional
     public void eliminar(Long id) {
         productoRepository.delete(buscarOFallar(id));
     }
