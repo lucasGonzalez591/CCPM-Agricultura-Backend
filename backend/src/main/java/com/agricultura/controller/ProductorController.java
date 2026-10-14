@@ -35,12 +35,12 @@ public class ProductorController {
     }
 
     @GetMapping("/{id}")
-    public ProductorResponse obtener(@PathVariable Long id){
+    public ProductorResponse obtener(@PathVariable("id") Long id) {
         return productorService.obtenerPorId(id);
     }
 
     @GetMapping("/{id}/productos")
-    public List<ProductoListadoResponse> productosDelProductor(@PathVariable Long id){
+    public List<ProductoListadoResponse> productosDelProductor(@PathVariable("id") Long id) {
         return productoService.listarPorProductor(id);
     }
 
@@ -53,18 +53,14 @@ public class ProductorController {
     }
 
     @PutMapping("/{id}")
-    public ProductorResponse actualizar(@PathVariable Long id,
+    public ProductorResponse actualizar(@PathVariable("id") Long id,
                                         @Valid @RequestBody ProductorRequest request) {
         return productorService.actualizar(id, request);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+    public ResponseEntity<Void> eliminar(@PathVariable("id") Long id) {
         productorService.eliminar(id);
         return ResponseEntity.noContent().build();
     }
-
-
-
-
 }
