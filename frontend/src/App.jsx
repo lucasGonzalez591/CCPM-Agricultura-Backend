@@ -5,6 +5,8 @@ import Productores from "./pages/Productores";
 import ProductorForm from "./pages/ProductorForm";
 import ProductorDetalle from "./pages/ProductorDetalle";
 import Productos from "./pages/Productos";
+import ProductoForm from "./pages/ProductoForm";
+import ProductoDetalle from "./pages/ProductoDetalle";
 import Reportes from "./pages/Reportes";
 
 export default function App() {
@@ -21,6 +23,10 @@ export default function App() {
           <Route path="/productores/:id/editar" element={<ProductorForm />} />
 
           <Route path="/productos" element={<Productos />} />
+          <Route path="/productos/nuevo" element={<ProductoForm />} />
+          <Route path="/productos/:id" element={<ProductoDetalle />} />
+          <Route path="/productos/:id/editar" element={<ProductoForm />} />
+
           <Route path="/reportes" element={<Reportes />} />
         </Routes>
       </main>

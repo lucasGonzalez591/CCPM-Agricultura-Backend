@@ -23,19 +23,18 @@ public class ProductoController {
 
     private final ProductoService productoService;
 
-
     public ProductoController(ProductoService productoService) {
         this.productoService = productoService;
     }
 
-    @Operation(summary = "Lista productores aplicando filtros combinables")
+    @Operation(summary = "Lista productos aplicando filtros combinables")
     @GetMapping
-    public List<ProductoListadoResponse> listar( @ParameterObject ProductoFiltro filtro) {
+    public List<ProductoListadoResponse> listar(@ParameterObject ProductoFiltro filtro) {
         return productoService.listar(filtro);
     }
 
     @GetMapping("/{id}")
-    public ProductoResponse obtener(@PathVariable Long id) {
+    public ProductoResponse obtener(@PathVariable("id") Long id) {
         return productoService.obtenerPorId(id);
     }
 
@@ -48,15 +47,14 @@ public class ProductoController {
     }
 
     @PutMapping("/{id}")
-    public ProductoResponse actualizar(@PathVariable Long id,
+    public ProductoResponse actualizar(@PathVariable("id") Long id,
                                        @Valid @RequestBody ProductoRequest request) {
         return productoService.actualizar(id, request);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+    public ResponseEntity<Void> eliminar(@PathVariable("id") Long id) {
         productoService.eliminar(id);
         return ResponseEntity.noContent().build();
     }
-
 }
