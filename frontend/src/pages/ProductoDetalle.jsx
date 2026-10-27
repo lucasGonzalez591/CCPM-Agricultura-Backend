@@ -4,6 +4,78 @@ import { obtenerProducto } from "../api/productosApi";
 import { interpretarError } from "../utils/errores";
 import Alerta from "../components/Alerta";
 
+function Carrusel({ fotos, nombre }) {
+  const [actual, setActual] = useState(0);
+  const total = fotos.length;
+
+  const anterior = () => setActual((i) => (i - 1 + total) % total);
+  const siguiente = () => setActual((i) => (i + 1) % total);
+
+  const teclas = (e) => {
+    if (e.key === "ArrowLeft") anterior();
+    if (e.key === "ArrowRight") siguiente();
+  };
+
+  return (
+    <div tabIndex={0} onKeyDown={teclas} style={{ maxWidth: 640, outline: "none" }}>
+      <div
+        className="position-relative rounded overflow-hidden bg-dark"
+        style={{ aspectRatio: "4 / 3" }}
+      >
+        <img
+          src={fotos[actual]}
+          alt={`${nombre} ${actual + 1} de ${total}`}
+          className="w-100 h-100"
+          style={{ objectFit: "contain" }}
+        />
+
+        {total > 1 && (
+          <>
+            <button
+              type="button"
+              onClick={anterior}
+              className="btn btn-dark position-absolute top-50 start-0 translate-middle-y ms-2 opacity-75"
+              aria-label="Foto anterior"
+            >
+              ‹
+            </button>
+            <button
+              type="button"
+              onClick={siguiente}
+              className="btn btn-dark position-absolute top-50 end-0 translate-middle-y me-2 opacity-75"
+              aria-label="Foto siguiente"
+            >
+              ›
+            </button>
+            <span className="badge text-bg-dark position-absolute bottom-0 end-0 m-2 opacity-75">
+              {actual + 1} / {total}
+            </span>
+          </>
+        )}
+      </div>
+
+      {total > 1 && (
+        <div className="d-flex gap-2 mt-2">
+          {fotos.map((foto, i) => (
+            <button
+              key={i}
+              type="button"
+              onClick={() => setActual(i)}
+              className={"p-0 border-2 rounded overflow-hidden bg-transparent " +
+                (i === actual ? "border border-success" : "border border-light")}
+              style={{ width: 72, height: 54, opacity: i === actual ? 1 : 0.6 }}
+              aria-label={`Ver foto ${i + 1}`}
+              aria-current={i === actual}
+            >
+              <img src={foto} alt="" className="w-100 h-100" style={{ objectFit: "cover" }} />
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function ProductoDetalle() {
   const { id } = useParams();
   const [producto, setProducto] = useState(null);
@@ -42,38 +114,43 @@ export default function ProductoDetalle() {
       {producto && (
         <div className="card card-tabla">
           <div className="card-body">
-            <h2 className="h4">{producto.nombre}</h2>
-            <p className="text-muted">{producto.descripcion || "Sin descripción."}</p>
-
-            <dl className="row mb-0">
-              <dt className="col-sm-3">Precio unitario</dt>
-              <dd className="col-sm-9">
-                {Number(producto.precioUnitario).toLocaleString("es-AR", {
-                  style: "currency",
-                  currency: "ARS",
-                })}
-              </dd>
-
-              <dt className="col-sm-3">Lugar de venta</dt>
-              <dd className="col-sm-9">{producto.lugarVenta}</dd>
-
-              <dt className="col-sm-3">Productor</dt>
-              <dd className="col-sm-9">
-                <Link to={`/productores/${producto.productorId}`}>{producto.productorNombre}</Link>
-              </dd>
-            </dl>
-
-            <h3 className="h6 mt-4">Fotografías</h3>
-            {producto.fotos && producto.fotos.length > 0 ? (
-              <div className="d-flex flex-wrap gap-3">
-                {producto.fotos.map((url, i) => (
-                  <img key={i} src={url} alt={`${producto.nombre} ${i + 1}`}
-                       className="img-thumbnail" style={{ maxWidth: 220 }} />
-                ))}
+            <div className="row g-4">
+              <div className="col-12 col-lg-6">
+                {producto.fotos && producto.fotos.length > 0 ? (
+                  <Carrusel key={producto.id} fotos={producto.fotos} nombre={producto.nombre} />
+                ) : (
+                  <div
+                    className="d-flex align-items-center justify-content-center rounded bg-light text-muted"
+                    style={{ aspectRatio: "4 / 3", maxWidth: 640 }}
+                  >
+                    Este producto no tiene fotos.
+                  </div>
+                )}
               </div>
-            ) : (
-              <p className="text-muted mb-0">Este producto no tiene fotos.</p>
-            )}
+
+              <div className="col-12 col-lg-6">
+                <h2 className="h4">{producto.nombre}</h2>
+                <p className="text-muted">{producto.descripcion || "Sin descripción."}</p>
+
+                <dl className="row mb-0">
+                  <dt className="col-sm-4">Precio unitario</dt>
+                  <dd className="col-sm-8">
+                    {Number(producto.precioUnitario).toLocaleString("es-AR", {
+                      style: "currency",
+                      currency: "ARS",
+                    })}
+                  </dd>
+
+                  <dt className="col-sm-4">Lugar de venta</dt>
+                  <dd className="col-sm-8">{producto.lugarVenta}</dd>
+
+                  <dt className="col-sm-4">Productor</dt>
+                  <dd className="col-sm-8">
+                    <Link to={`/productores/${producto.productorId}`}>{producto.productorNombre}</Link>
+                  </dd>
+                </dl>
+              </div>
+            </div>
           </div>
         </div>
       )}
